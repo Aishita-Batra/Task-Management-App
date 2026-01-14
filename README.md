@@ -27,9 +27,9 @@ The primary objective is to develop a Task Management Application that facilitat
 
 ## Architecture Diagram
 
-<div align="center">
-![Architecture](Images/Task_Management_Architecture_Diagram.jpg){width=100%}
-</div>
+
+![Architecture](Images/Task_Management_Architecture_Diagram.jpg)
+
 
 
 
