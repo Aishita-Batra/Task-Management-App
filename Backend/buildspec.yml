@@ -1,0 +1,22 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      python: 3.12
+    commands:
+      - pip install -r requirements.txt
+      - pip install pytest
+  build:
+    commands:
+      - pytest test_*.py
+      - aws s3 cp ./ s3://task-management-app-lambda --recursive
+  post_build:
+    commands:
+      - printf '{"lambda-bucket":"%s"}' "task-management-app-lambda" > lambda-code.json
+      - aws cloudformation package --template-file taskapp.json --s3-bucket task-management-app-lambda --output-template-file packaged.yaml
+      - aws s3 cp packaged.yaml s3://task-management-app-lambda/packaged.yaml
+      - aws cloudformation deploy --template-file packaged.yaml --stack-name "taskapp" --s3-bucket task-management-app-lambda --capabilities CAPABILITY_IAM
+artifacts:
+  files:
+    - '**/*'
+  base-directory: '.'
